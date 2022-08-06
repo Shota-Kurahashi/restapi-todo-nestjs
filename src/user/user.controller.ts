@@ -5,7 +5,7 @@ import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '@prisma/client';
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt')) //jwtを認証する
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

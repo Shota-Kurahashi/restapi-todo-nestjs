@@ -14,17 +14,19 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req) => {
           let jwt = null;
+          //cookieを使う場合
           if (req && req.cookies) {
             jwt = req.cookies['access_token'];
           }
           return jwt;
         },
       ]),
+      //jwtの有効期限が切れていた場合は、認証に失敗する
       ignoreExpiration: false,
       secretOrKey: config.get('JWT_SECRET'),
     });
   }
-
+  //overrideするイメージ
   async validate(payload: { sub: number; email: string }) {
     const user = await this.prisma.user.findUnique({
       where: {

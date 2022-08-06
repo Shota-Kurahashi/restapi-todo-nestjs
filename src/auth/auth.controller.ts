@@ -17,6 +17,11 @@ import { Csrf, Msg } from './interfaces/auth.interface';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Get('csrf')
+  getCsrfToken(@Req() req: Request): Csrf {
+    return { csrfToken: req.csrfToken() };
+  }
+
   @Post('signup')
   //*RequestBodyを使う場合は@Bodyを使う
   signUp(@Body() dto: AuthDto): Promise<Msg> {
@@ -34,7 +39,7 @@ export class AuthController {
     const jwt = await this.authService.login(dto);
     res.cookie('access_token', jwt.accessToken, {
       httpOnly: true,
-      secure: false, //* true -> httpsのみになる
+      secure: true, //* true -> httpsのみになる
       sameSite: 'none',
       path: '/',
     });
@@ -46,7 +51,7 @@ export class AuthController {
   logout(@Req() req: Request, @Res({ passthrough: true }) res: Response): Msg {
     res.cookie('access_token', '', {
       httpOnly: true,
-      secure: false, //* true -> httpsのみになる
+      secure: true, //* true -> httpsのみになる
       sameSite: 'none',
       path: '/',
     });
