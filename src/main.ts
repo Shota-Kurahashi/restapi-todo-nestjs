@@ -7,6 +7,7 @@ import * as csurf from 'csurf';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  //*validationを使うために必要 whitelist -> validateに必要ないものがある場合はwhitelistをtrueにしていると省いてくれる
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors({ credentials: true, origin: 'http://localhost:3000' });
   app.use(cookieParser());
